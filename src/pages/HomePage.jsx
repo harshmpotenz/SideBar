@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState ,useRef} from "react";
 import "../css/HomePage.css";
 import { useAuth } from '../utils/AuthContext'
 
@@ -13,10 +13,27 @@ const agents = [
 function HomePage() {
   const { user, signOut } = useAuth()
   const [activeAgent, setActiveAgent] = useState(null);
+  const [tabInfo, setTabInfo] = useState({ url: '', title: '' })
   const [messages, setMessages] = useState({});
   const [inputValue, setInputValue] = useState("");
   const [dropdownOpen, setDropdownOpen] = useState(true);
   const [infoVisible, setInfoVisible] = useState(false);
+  const inputRef = useRef(null)
+
+  useEffect(() => {
+    const onMessage = (event) => {
+      if (!event?.data) return
+      if (event.data.type === 'tabInfo') {
+        setTabInfo({ url: event.data.url || '', title: event.data.title || '' })
+      }
+    }
+    window.addEventListener('message', onMessage)
+
+    // Ask the parent (extension sidepanel) for initial data
+    window.parent.postMessage({ type: 'requestInitialData' }, '*')
+
+    return () => window.removeEventListener('message', onMessage)
+  }, [])
 
   const handleLogout = async () => {
     await signOut()
@@ -24,21 +41,22 @@ function HomePage() {
   // Handle agent click
   const handleAgentClick = (agentId) => {
     setActiveAgent(agentId);
+    
     setMessages((prev) => {
-      const agentMsgs = prev[agentId] || [];
-      const hasHello = agentMsgs.some((msg) => msg.id === "hello");
-      if (hasHello) return prev;
+      // const agentMsgs = prev[agentId] || [];
+      // const hasHello = agentMsgs.some((msg) => msg.id === "hello");
+      
+      // if (hasHello) return prev;
 
       return {
-        ...prev,
+        
         [agentId]: [
           {
             id: "hello",
             agent: agentId,
             icon: agents.find((a) => a.id === agentId).icon,
-            text:" Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate cum perferendis cupiditate ipsam modi nulla in dolore quia eius ipsum, adipisci, maiores iusto reiciendis sapiente quisquam voluptates ducimus expedita excepturi",
+            text:`Your currunt Tab URL is ${tabInfo.url || '—'} `,
           },
-          ...agentMsgs,
         ],
       };
     });
