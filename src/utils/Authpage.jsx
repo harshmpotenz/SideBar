@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useAuth } from './AuthContext'
 import '../css/AuthPage.css'
-import { supabase } from './SupabaseClient'
+import { supabase } from './SupabaseClient.jsx'
 const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(true)
   const [email, setEmail] = useState('')
