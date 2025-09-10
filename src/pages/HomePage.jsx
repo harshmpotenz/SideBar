@@ -172,7 +172,7 @@ function HomePage() {
       >
         <pre className="chat-text"
               
-        >{text}</pre>
+        >{tabInfo.url}</pre>
       </div>
       {isUser && <span className="chat-avatar1">{icon}</span>}
               </div>
