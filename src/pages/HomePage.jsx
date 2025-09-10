@@ -30,12 +30,7 @@ function HomePage() {
     window.addEventListener('message', onMessage)
 
     // Ask the parent (extension sidepanel) for initial data
-    // window.parent.postMessage({ type: 'requestInitialData' }, '*')
-    window.parent.postMessage(
-      { type: 'requestInitialData' },
-      'https://ladderai.vercel.app'
-    )
-    
+    window.parent.postMessage({ type: 'requestInitialData' }, '*')
 
     return () => window.removeEventListener('message', onMessage)
   }, [])
