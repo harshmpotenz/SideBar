@@ -1,6 +1,7 @@
 import React, {useEffect, useState ,useRef} from "react";
 import "../css/HomePage.css";
 import { useAuth } from '../utils/AuthContext'
+import { useNavigate } from "react-router-dom";
 
 const agents = [
   { id: "scout", name: "Scout", icon: "🔍", colour: "#c9f5f0" },
@@ -18,7 +19,9 @@ function HomePage() {
   const [inputValue, setInputValue] = useState("");
   const [dropdownOpen, setDropdownOpen] = useState(true);
   const [infoVisible, setInfoVisible] = useState(false);
+  const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const inputRef = useRef(null)
+  const navigate = useNavigate();
 
   useEffect(() => {
     const onMessage = (event) => {
@@ -61,7 +64,7 @@ function HomePage() {
       };
     });
   };
-
+      
   // Send a message
   const handleSendMessage = () => {
     if (!inputValue.trim() || !activeAgent) return;
@@ -90,7 +93,7 @@ function HomePage() {
       <div className="header">
         <h1 className="headline">
           <span className="purple">NUCLEAS</span> · Task
-          <span
+          {/* <span
             className="info-icon"
             onMouseEnter={() => setInfoVisible(true)}
             onMouseLeave={() => setInfoVisible(false)}
@@ -101,9 +104,35 @@ function HomePage() {
                 NUCLEAS is your AI-powered task management assistant.
               </div>
             )}
-          </span>
+          </span> */}
         </h1>
+        <button onClick={() => navigate("/data")}>
+              Data</button>
+        <div className="profile-container">
+          <button
+            className="profile-button"
+            onClick={() => setProfileDropdownOpen((prev) => !prev)}
+          >
+            <img
+              src={user?.user_metadata?.picture || "https://via.placeholder.com/40"}
+              alt="Profile"
+              className="profile-image"
+            />
+          </button>
+          {profileDropdownOpen && (
+            <div className="profile-dropdown">
+              <div className="profile-info">
+                <p className="profile-name">{user?.user_metadata?.displayName || user?.email?.split('@')[0] || "User"}</p>
+                <p className="profile-email">{user?.email || "No email"}</p>
+              </div>
+              <button onClick={handleLogout} className="profile-signout">
+                Sign Out
+              </button>
+            </div>
+          )}
+        </div>
       </div>
+      
 
       {/* Dropdown */}
       <div className="dropdown">
@@ -204,12 +233,7 @@ function HomePage() {
           ➤
         </button>
       </div>
-      <div className="nav-right">
-          <span>Hello, {user?.email}</span>
-          <button onClick={handleLogout} className="logout-btn">
-            Logout
-          </button>
-        </div>
+      
     </div>
   );
 }

@@ -58,14 +58,12 @@ const AuthPage = () => {
         options: {
           // Pass the Google access token from the credentialResponse
           access_token: credentialResponse.credential,
+          
         },
       });
 
       if (error) throw error;
 
-      // If successful, the user is logged in automatically
-      // You can redirect or handle the success case here
-      setMessage('Successfully logged in with Google!');
     } catch (error) {
       setError(error.message || 'Google login failed');
     } finally {

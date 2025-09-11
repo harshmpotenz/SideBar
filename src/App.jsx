@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { AuthProvider, useAuth } from './utils/AuthContext'
 import HomePage from './pages/HomePage'
 import AuthPage from './pages/Authpage'
+import { DataApp } from './pages/DataPage'
 
 const ProtectedRoute = ({ children }) => {
   const { user } = useAuth()
@@ -24,6 +25,7 @@ function AppContent() {
 
   return (
     <Routes>
+      <Route path="/data" element={<DataApp></DataApp>}></Route>
       <Route path="/auth" element={
         <PublicRoute>
           <AuthPage />
