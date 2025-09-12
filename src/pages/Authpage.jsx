@@ -3,6 +3,7 @@ import { useAuth } from '../utils/AuthContext';
 import '../css/AuthPage.css';
 import { supabase } from '../utils/SupabaseClient';
 import { GoogleLogin } from '@react-oauth/google';
+import { Button } from '@mui/material';
 
 const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -47,73 +48,62 @@ const AuthPage = () => {
     }
   };
 
-  const handleGoogleLogin = async (credentialResponse) => {
-    setError('');
-    setLoading(true);
+  // const handleGoogleLogin = async (credentialResponse) => {
+  //   setError('');
+  //   setLoading(true);
 
-    try {
-      // Sign in with Supabase OAuth using Google provider
-      const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          // Pass the Google access token from the credentialResponse
-          access_token: credentialResponse.credential,
+  //   try {
+  //     // Sign in with Supabase OAuth using Google provider
+  //     const { data, error } = await supabase.auth.signInWithOAuth({
+  //       provider: 'google',
+  //       options: {
+  //         // Pass the Google access token from the credentialResponse
           
-        },
-      });
+  //         access_token: credentialResponse.credential,
+          
+  //       },
+  //     });
 
-      if (error) throw error;
+  //     if (error) throw error;
 
-    } catch (error) {
-      setError(error.message || 'Google login failed');
-    } finally {
-      setLoading(false);
-    }
+  //   } catch (error) {
+  //     setError(error.message || 'Google login failed');
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+
+  // LoginButton.jsx
+
+  const handleGoogleLogin = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: "http://localhost:5174"  // must match Supabase dashboard
+      }
+    });
+    if (error) console.error("OAuth error", error.message);
   };
+
+
 
   return (
     <div className="auth-container">
       <div className="auth-card">
         <h2>{isLogin ? 'Login' : 'Sign Up'}</h2>
-        <GoogleLogin
-          onSuccess={handleGoogleLogin}
+        <Button
+          onClick={handleGoogleLogin}
           onError={() => {
             setError('Google login failed');
             console.log('Login Failed');
           }}
-        />
+        >Login</Button>
 
         {error && <div className="error-message">{error}</div>}
         {message && <div className="success-message">{message}</div>}
 
-        <form onSubmit={handleSubmit} className="auth-form">
-          <div className="form-group">
-            <label>Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              placeholder="Enter your email"
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              placeholder="Enter your password"
-              minLength={6}
-            />
-          </div>
-
-          <button type="submit" disabled={loading} className="auth-button">
-            {loading ? 'Loading...' : (isLogin ? 'Login' : 'Sign Up')}
-          </button>
-        </form>
+    
 
         <p className="toggle-auth">
           {isLogin ? "Don't have an account? " : 'Already have an account? '}

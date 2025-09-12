@@ -93,18 +93,7 @@ function HomePage() {
       <div className="header">
         <h1 className="headline">
           <span className="purple">NUCLEAS</span> · Task
-          {/* <span
-            className="info-icon"
-            onMouseEnter={() => setInfoVisible(true)}
-            onMouseLeave={() => setInfoVisible(false)}
-          >
-            ℹ️
-            {infoVisible && (
-              <div className="tooltip">
-                NUCLEAS is your AI-powered task management assistant.
-              </div>
-            )}
-          </span> */}
+         
         </h1>
         <button onClick={() => navigate("/data")}>
               Data</button>
@@ -114,7 +103,7 @@ function HomePage() {
             onClick={() => setProfileDropdownOpen((prev) => !prev)}
           >
             <img
-              src={user?.user_metadata?.picture || "https://via.placeholder.com/40"}
+              src={user?.user_metadata?.avatar_url || "https://via.placeholder.com/40"}
               alt="Profile"
               className="profile-image"
             />
