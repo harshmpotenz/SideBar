@@ -80,7 +80,7 @@ const AuthPage = () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: "http://localhost:5174"  // must match Supabase dashboard
+        redirectTo: "http://localhost:5173"  // must match Supabase dashboard
       }
     });
     if (error) console.error("OAuth error", error.message);
