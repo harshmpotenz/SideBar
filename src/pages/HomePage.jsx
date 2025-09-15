@@ -2,6 +2,7 @@ import React, {useEffect, useState ,useRef} from "react";
 import "../css/HomePage.css";
 import { useAuth } from '../utils/AuthContext'
 import { useNavigate } from "react-router-dom";
+import { Button } from "@mui/material";
 
 const agents = [
   { id: "scout", name: "Scout", icon: "🔍", colour: "#c9f5f0" },
@@ -46,10 +47,7 @@ function HomePage() {
     setActiveAgent(agentId);
     
     setMessages((prev) => {
-      // const agentMsgs = prev[agentId] || [];
-      // const hasHello = agentMsgs.some((msg) => msg.id === "hello");
-      
-      // if (hasHello) return prev;
+ 
 
       return {
         
@@ -93,10 +91,21 @@ function HomePage() {
       <div className="header">
         <h1 className="headline">
           <span className="purple">NUCLEAS</span> · Task
-         
+          {/* <span
+            className="info-icon"
+            onMouseEnter={() => setInfoVisible(true)}
+            onMouseLeave={() => setInfoVisible(false)}
+          >
+            ℹ️
+            {infoVisible && (
+              <div className="tooltip">
+                NUCLEAS is your AI-powered task management assistant.
+              </div>
+            )}
+          </span> */}
         </h1>
-        <button onClick={() => navigate("/data")}>
-              Data</button>
+        <Button onClick={() => navigate("/data")}>
+              Data</Button>
         <div className="profile-container">
           <button
             className="profile-button"
@@ -222,7 +231,6 @@ function HomePage() {
           ➤
         </button>
       </div>
-      
     </div>
   );
 }

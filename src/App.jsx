@@ -2,7 +2,7 @@ import React from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider, useAuth } from './utils/AuthContext'
 import HomePage from './pages/HomePage'
-import AuthPage from './pages/Authpage'
+import AuthPage from './pages/AuthPage'
 import { DataApp } from './pages/DataPage'
 
 const ProtectedRoute = ({ children }) => {
@@ -10,7 +10,6 @@ const ProtectedRoute = ({ children }) => {
   return user ? children : <Navigate to="/auth" />
 }
 
-// Public Route component (redirect if already authenticated)
 const PublicRoute = ({ children }) => {
   const { user } = useAuth()
   return !user ? children : <Navigate to="/" />

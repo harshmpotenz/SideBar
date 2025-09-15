@@ -8,28 +8,32 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
+  const [supabaseToken, setSupabaseToken] = useState(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // Check active sessions and sets the user
-    const getSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession()
+  const getSession = async () => {
+    const { data: { session } } = await supabase.auth.getSession()
+    setUser(session?.user ?? null)
+    setSupabaseToken(session?.access_token??null)
+    setLoading(false)
+  }
+
+  getSession()
+
+  const { data: { subscription } } = supabase.auth.onAuthStateChange(
+    async (event, session) => {
+      if (event === 'SIGNED_IN' && session?.access_token) {
+        const accessToken = session.access_token
+      }
       setUser(session?.user ?? null)
       setLoading(false)
     }
+  )
 
-    getSession()
+  return () => subscription.unsubscribe()
+}, [])
 
-    // Listen for changes on auth state
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        setUser(session?.user ?? null)
-        setLoading(false)
-      }
-    )
-
-    return () => subscription.unsubscribe()
-  }, [])
 
   const value = {
     signUp: async (email, password) => {
@@ -46,11 +50,14 @@ export const AuthProvider = ({ children }) => {
       })
       return { data, error }
     },
+
     signOut: async () => {
       await supabase.auth.signOut()
+
     },
     user,
-    loading
+    loading,
+    supabaseToken
   }
 
   return (
